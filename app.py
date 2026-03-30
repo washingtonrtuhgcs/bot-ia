@@ -26,32 +26,34 @@ def home():
             '''
 
     return f'''
-    <html>
-    <body style="margin:0;font-family:sans-serif;background:#ece5dd;">
+<html>
+<body style="margin:0;font-family:sans-serif;background:#ece5dd;">
+
+    <div style="background:#075E54;color:white;padding:15px;font-size:18px;">
+        Atendimento Online 🤖
+    </div>
+
+    <div id="chat" style="padding-bottom:80px;max-width:600px;margin:auto;">
+        {chat_html}
+    </div>
+
+    <form action="/chat" style="position:fixed;bottom:0;width:100%;display:flex;background:#fff;padding:10px;">
+        <input name="msg" placeholder="Digite sua mensagem..." 
+        style="flex:1;padding:12px;border-radius:25px;border:1px solid #ccc;">
         
-        <!-- TOPO -->
-        <div style="background:#075E54;color:white;padding:15px;font-size:18px;">
-            Atendimento Online 🤖
-        </div>
+        <button style="margin-left:10px;padding:12px 20px;border:none;border-radius:25px;background:#25D366;color:white;">
+            Enviar
+        </button>
+    </form>
 
-        <!-- CHAT -->
-        <div style="padding-bottom:80px;">
-            {chat_html}
-        </div>
+    <script>
+        var chat = document.getElementById("chat");
+        chat.scrollTop = chat.scrollHeight;
+    </script>
 
-        <!-- INPUT -->
-        <form action="/chat" style="position:fixed;bottom:0;width:100%;display:flex;background:#fff;padding:10px;">
-            <input name="msg" placeholder="Digite sua mensagem..." 
-            style="flex:1;padding:12px;border-radius:25px;border:1px solid #ccc;">
-            
-            <button style="margin-left:10px;padding:12px 20px;border:none;border-radius:25px;background:#25D366;color:white;">
-                Enviar
-            </button>
-        </form>
-
-    </body>
-    </html>
-    '''
+</body>
+</html>
+'''
 
 @app.route('/chat')
 def chat():
@@ -60,15 +62,15 @@ def chat():
     texto = msg.lower()
 
     if 'oi' in texto:
-        resp = "Olá! 👋 Seja bem-vindo. Digite 1 para Loja ou 2 para Trade"
+        resp = "Olá! 👋 Digite 1 para Loja ou 2 para Trade"
     elif msg == '1':
         resp = "🛒 Produtos:\n- Camisa R$50\n- Calça R$100"
     elif msg == '2':
-        resp = "📈 Trade:\nDigite: sinal ou estrategia"
+        resp = "📈 Trade: digite sinal ou estrategia"
     elif 'sinal' in texto:
         resp = "📊 Entrada simulada: tendência de alta"
     elif 'estrategia' in texto:
-        resp = "📘 Estratégia:\n- usar stop loss\n- evitar emoção"
+        resp = "📘 Estratégia: usar stop e evitar emoção"
     else:
         resp = "❌ Digite uma opção válida"
 
