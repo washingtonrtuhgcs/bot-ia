@@ -10,16 +10,16 @@ def home():
     for i, msg in enumerate(conversa):
         if i % 2 == 0:
             chat_html += f'''
-            <div style="text-align:right;margin:10px;">
-                <span style="background:#25D366;color:white;padding:12px 16px;border-radius:15px;display:inline-block;max-width:70%;box-shadow:0 2px 5px rgba(0,0,0,0.2);">
+            <div style="text-align:right;margin:10px;animation:fade 0.3s;">
+                <span style="background:#25D366;color:white;padding:12px 16px;border-radius:18px;display:inline-block;max-width:70%;box-shadow:0 3px 6px rgba(0,0,0,0.2);">
                     {msg}
                 </span>
             </div>
             '''
         else:
             chat_html += f'''
-            <div style="text-align:left;margin:10px;">
-                <span style="background:#ffffff;padding:12px 16px;border-radius:15px;display:inline-block;max-width:70%;box-shadow:0 2px 5px rgba(0,0,0,0.2);">
+            <div style="text-align:left;margin:10px;animation:fade 0.3s;">
+                <span style="background:#ffffff;padding:12px 16px;border-radius:18px;display:inline-block;max-width:70%;box-shadow:0 3px 6px rgba(0,0,0,0.2);">
                     {msg}
                 </span>
             </div>
@@ -27,14 +27,22 @@ def home():
 
     return f'''
 <html>
-<body style="margin:0;font-family:sans-serif;background:linear-gradient(to bottom,#075E54,#128C7E);">
+<head>
+<style>
+@keyframes fade {{
+    from {{opacity:0; transform:translateY(10px);}}
+    to {{opacity:1; transform:translateY(0);}}
+}}
+</style>
+</head>
 
-    <!-- CONTAINER -->
-    <div style="max-width:600px;margin:auto;height:100vh;display:flex;flex-direction:column;">
+<body style="margin:0;font-family:sans-serif;background:linear-gradient(to bottom,#075E54,#128C7E);display:flex;justify-content:center;align-items:center;height:100vh;">
+
+    <div style="width:100%;max-width:400px;height:90vh;background:#fff;border-radius:20px;display:flex;flex-direction:column;box-shadow:0 10px 25px rgba(0,0,0,0.3);overflow:hidden;">
 
         <!-- TOPO -->
-        <div style="background:#075E54;color:white;padding:15px;font-size:18px;border-bottom:2px solid #128C7E;">
-            🤖 Atendimento Profissional
+        <div style="background:#075E54;color:white;padding:15px;font-size:18px;">
+            🤖 Atendimento Premium
         </div>
 
         <!-- CHAT -->
@@ -48,7 +56,7 @@ def home():
             style="flex:1;padding:12px;border-radius:25px;border:1px solid #ccc;">
             
             <button style="margin-left:10px;padding:12px 20px;border:none;border-radius:25px;background:#25D366;color:white;font-weight:bold;">
-                Enviar
+                ➤
             </button>
         </form>
 
@@ -70,9 +78,9 @@ def chat():
     texto = msg.lower()
 
     if 'oi' in texto:
-        resp = "Olá! 👋 Bem-vindo ao atendimento profissional.\nDigite 1 para Loja ou 2 para Trade"
+        resp = "Olá! 👋 Bem-vindo ao atendimento premium.\nDigite 1 para Loja ou 2 para Trade"
     elif msg == '1':
-        resp = "🛒 Produtos disponíveis:\n- Camisa R$50\n- Calça R$100"
+        resp = "🛒 Produtos:\n- Camisa R$50\n- Calça R$100"
     elif msg == '2':
         resp = "📈 Trade:\nDigite 'sinal' ou 'estrategia'"
     elif 'sinal' in texto:
