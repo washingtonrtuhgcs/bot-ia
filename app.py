@@ -1,41 +1,19 @@
-from flask import Flask, request
+xzfrom flask import Flask, request
+import os
+from openai import OpenAI
 
 app = Flask(__name__)
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.route('/')
 def home():
     return '''
     <html>
-    <head>
-        <title>Bot IA</title>
-        <style>
-            body {
-                background: #0f172a;
-                color: white;
-                font-family: Arial;
-                text-align: center;
-                padding-top: 50px;
-            }
-            input {
-                padding: 10px;
-                width: 70%;
-                border-radius: 10px;
-                border: none;
-            }
-            button {
-                padding: 10px 20px;
-                border-radius: 10px;
-                border: none;
-                background: #22c55e;
-                color: white;
-                font-weight: bold;
-            }
-        </style>
-    </head>
-    <body>
+    <body style="background:#0f172a;color:white;text-align:center;padding-top:50px;font-family:Arial;">
         <h1>🤖 Bot IA</h1>
         <form action="/chat">
-            <input name="msg" placeholder="Digite algo...">
+            <input name="msg" placeholder="Digite algo..." style="padding:10px;width:70%;">
             <br><br>
             <button type="submit">Enviar</button>
         </form>
@@ -47,16 +25,25 @@ def home():
 def chat():
     msg = request.args.get('msg')
 
+    resposta = "Erro..."
+
     if msg:
-        resposta = f"Você disse: {msg}"
-    else:
-        resposta = "Digite algo!"
+        try:
+            resposta_ia = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "user", "content": msg}
+                ]
+            )
+            resposta = resposta_ia.choices[0].message.content
+        except:
+            resposta = "Erro ao responder"
 
     return f'''
     <html>
     <body style="background:#0f172a;color:white;text-align:center;padding-top:50px;font-family:Arial;">
         <h1>🤖 Bot IA</h1>
-        <p style="font-size:20px;">{resposta}</p>
+        <p>{resposta}</p>
         <br>
         <a href="/" style="color:#22c55e;">⬅️ Voltar</a>
     </body>
