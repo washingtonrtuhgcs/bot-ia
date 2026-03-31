@@ -1,60 +1,88 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template_string
 
 app = Flask(__name__)
 
-def responder(msg):
-    msg = msg.lower().strip()
+PIX = "120.749.664-23"
 
-    if msg == "1" or "comprar" in msg:
-        return "🛒 Planos:\nBásico: R$10\nPremium: R$25\n\nPIX: 120.749.664-23 💸"
+html = """
+<!DOCTYPE html>
+<html>
+<head>
+<title>IA Trader</title>
+<style>
+body {
+    background: #0f172a;
+    color: white;
+    font-family: Arial;
+}
+.chat {
+    max-width: 400px;
+    margin: auto;
+    margin-top: 30px;
+}
+.msg {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+}
+.user { background: #2563eb; text-align: right; }
+.bot { background: #1e293b; }
+button {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    background: #22c55e;
+    color: white;
+}
+</style>
+</head>
 
-    elif msg == "2" or "trade" in msg:
-        return "📊 Sinal:\nBTC/USDT\nEntrada: 61.200\nSaída: 62.000\nStop: 60.800"
+<body>
+<div class="chat" id="chat">
+    <div class="msg bot">Fala 👋 Escolha uma opção:</div>
+    <button onclick="send('comprar')">🛒 Comprar</button>
+    <button onclick="send('sinal')">📊 Sinais</button>
+</div>
 
-    elif "oi" in msg or "olá" in msg:
-        return "Fala 👋\nDigite:\n1 comprar 🛒\n2 trade 📊"
+<script>
+function send(text){
+    let chat = document.getElementById("chat");
 
-    else:
-        return "Digite:\n1 🛒 Comprar\n2 📊 Trade"
+    chat.innerHTML += `<div class="msg user">${text}</div>`;
 
-@app.route('/')
+    fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({msg: text})
+    })
+    .then(res => res.json())
+    .then(data => {
+        chat.innerHTML += `<div class="msg bot">${data.resposta}</div>`;
+        chat.scrollTop = chat.scrollHeight;
+    });
+}
+</script>
+</body>
+</html>
+"""
+
+@app.route("/")
 def home():
-    return '''
-    <html>
-    <body style="background:#0f172a;color:white;text-align:center;font-family:Arial">
-    <h2>🤖 Chat IA</h2>
-    <div id="chat"></div>
-    <input id="msg" placeholder="Digite..." />
-    <button onclick="enviar()">Enviar</button>
+    return render_template_string(html)
 
-    <script>
-    async function enviar(){
-        let texto = document.getElementById("msg").value;
-        if(!texto) return;
-
-        let chat = document.getElementById("chat");
-        chat.innerHTML += "<p><b>Você:</b> "+texto+"</p>";
-
-        let res = await fetch("/api/chat",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({msg:texto})
-        });
-
-        let data = await res.json();
-        chat.innerHTML += "<p><b>Bot:</b> "+data.resposta+"</p>";
-    }
-    </script>
-    </body>
-    </html>
-    '''
-
-@app.route('/api/chat', methods=['POST'])
+@app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json()
-    msg = data.get("msg", "")
-    resposta = responder(msg)
+    user = request.json.get("msg").lower()
+
+    if "comprar" in user:
+        resposta = f"🛒 Planos:\\nBásico: R$10\\nPremium: R$25\\nPIX: {PIX} 💸"
+    elif "sinal" in user:
+        resposta = "📊 Sinal BTC/USDT\\nEntrada: 61.200\\nSaída: 62.000\\nStop: 60.800"
+    else:
+        resposta = "🤖 Clique nos botões acima."
+
     return jsonify({"resposta": resposta})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run()
