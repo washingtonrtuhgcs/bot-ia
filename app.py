@@ -4,7 +4,7 @@ import openai
 
 app = Flask(__name__)
 
-# pega a chave da variável de ambiente
+# chave da API
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route('/')
