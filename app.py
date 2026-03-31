@@ -4,32 +4,33 @@ app = Flask(__name__)
 
 conversa = []
 
+PIX = "120.749.664-23"
+
 @app.route('/')
 def home():
-    chat_html = ''
-
-    for i, msg in enumerate(conversa):
-        if i % 2 == 0:
-            chat_html += f'<div style="text-align:right;margin:10px;"><span style="background:#25D366;color:white;padding:10px;border-radius:10px;">{msg}</span></div>'
-        else:
-            chat_html += f'<div style="text-align:left;margin:10px;"><span style="background:#fff;padding:10px;border-radius:10px;">{msg}</span></div>'
-
     return f'''
     <html>
     <body style="margin:0;font-family:sans-serif;background:#ece5dd;">
 
-    <div style="background:#075E54;color:white;padding:15px;">
+    <div style="background:#075E54;color:white;padding:15px;text-align:center;">
         💼 Washington IA
     </div>
 
-    <div style="padding-bottom:70px;">
-        {chat_html}
-    </div>
+    <div style="padding:20px;text-align:center;">
+        <h3>Escolha uma opção 👇</h3>
 
-    <form action="/chat" style="position:fixed;bottom:0;width:100%;display:flex;background:#fff;padding:10px;">
-        <input name="msg" placeholder="Digite..." style="flex:1;padding:10px;">
-        <button>Enviar</button>
-    </form>
+        <a href="/chat?msg=1">
+            <button style="padding:15px;margin:10px;background:#25D366;color:white;border:none;border-radius:10px;">
+                🛒 Loja
+            </button>
+        </a>
+
+        <a href="/chat?msg=2">
+            <button style="padding:15px;margin:10px;background:#128C7E;color:white;border:none;border-radius:10px;">
+                📈 Trade
+            </button>
+        </a>
+    </div>
 
     </body>
     </html>
@@ -39,37 +40,65 @@ def home():
 def chat():
     msg = request.args.get('msg')
 
-    if not msg:
-        return '<meta http-equiv="refresh" content="0; url=/">'
+    if msg == '1':
+        return f'''
+        <html><body style="font-family:sans-serif;text-align:center;background:#ece5dd;">
+        <h2>🛒 Produtos</h2>
 
-    conversa.append(msg)
-    texto = msg.lower()
+        <a href="/chat?msg=11">
+            <button style="padding:15px;margin:10px;background:#25D366;color:white;border:none;border-radius:10px;">
+                Camisa R$50
+            </button>
+        </a>
 
-    if 'oi' in texto:
-        resp = "Olá! 👋 Digite 1 para Loja ou 2 para Trade"
+        <a href="/chat?msg=22">
+            <button style="padding:15px;margin:10px;background:#25D366;color:white;border:none;border-radius:10px;">
+                Calça R$100
+            </button>
+        </a>
 
-    elif msg == '1':
-        resp = "🛒 Produtos:\n11 - Camisa R$50\n22 - Calça R$100"
+        </body></html>
+        '''
 
     elif msg == '11':
-        resp = "💳 Camisa R$50\nPIX (CPF): 120.749.664-23\nNome: Washington Luiz Marinho Araújo Filho\nBanco: PicPay\nEnvie o comprovante ✅"
+        return f'''
+        <html><body style="font-family:sans-serif;text-align:center;background:#ece5dd;">
+        <h2>💳 Camisa R$50</h2>
+
+        <p>PIX: {PIX}</p>
+
+        <button onclick="navigator.clipboard.writeText('{PIX}')">
+            📋 Copiar PIX
+        </button>
+
+        <p>Após pagar, envie o comprovante ✅</p>
+
+        </body></html>
+        '''
 
     elif msg == '22':
-        resp = "💳 Calça R$100\nPIX (CPF): 120.749.664-23\nNome: Washington Luiz Marinho Araújo Filho\nBanco: PicPay\nEnvie o comprovante ✅"
+        return f'''
+        <html><body style="font-family:sans-serif;text-align:center;background:#ece5dd;">
+        <h2>💳 Calça R$100</h2>
+
+        <p>PIX: {PIX}</p>
+
+        <button onclick="navigator.clipboard.writeText('{PIX}')">
+            📋 Copiar PIX
+        </button>
+
+        <p>Após pagar, envie o comprovante ✅</p>
+
+        </body></html>
+        '''
 
     elif msg == '2':
-        resp = "📈 Trade: digite 'sinal' ou 'estrategia'"
-
-    elif 'sinal' in texto:
-        resp = "📊 Tendência de alta"
-
-    elif 'estrategia' in texto:
-        resp = "📘 Use stop"
-
-    else:
-        resp = "❌ Digite 'oi'"
-
-    conversa.append(resp)
+        return '''
+        <html><body style="font-family:sans-serif;text-align:center;">
+        <h2>📈 Trade</h2>
+        <p>Digite 'sinal' ou 'estrategia'</p>
+        </body></html>
+        '''
 
     return '<meta http-equiv="refresh" content="0; url=/">'
 
