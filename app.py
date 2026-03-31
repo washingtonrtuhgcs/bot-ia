@@ -5,19 +5,13 @@ def chat():
     texto = msg.lower()
 
     if 'oi' in texto:
-        resp = "Olá! 👋 Bem-vindo ao atendimento Premium.\nDigite 1 para Loja ou 2 para Trade"
+        resp = "Olá! 👋 Eu sou Washington IA 🤖\nDigite 1 para Loja ou 2 para Trade"
 
     elif msg == '1':
         resp = "🛒 Produtos:\n1 - Camisa R$50\n2 - Calça R$100\nDigite 1 ou 2 para comprar"
 
     elif msg == '2':
         resp = "📈 Trade:\nDigite 'sinal' ou 'estrategia'"
-
-    elif msg == '1':
-        resp = "💳 Pagamento via PIX:\nChave: seuemail@gmail.com\nEnvie o comprovante"
-
-    elif msg == '2':
-        resp = "💳 Pagamento via PIX:\nChave: seuemail@gmail.com\nEnvie o comprovante"
 
     elif 'sinal' in texto:
         resp = "📊 Entrada simulada: tendência de alta"
