@@ -9,9 +9,9 @@ def home():
     chat_html = ''
     for i, msg in enumerate(conversa):
         if i % 2 == 0:
-            chat_html += f'<div style="text-align:right;"><b>Você:</b> {msg}</div>'
+            chat_html += f'<p><b>Você:</b> {msg}</p>'
         else:
-            chat_html += f'<div style="text-align:left;"><b>Bot:</b> {msg}</div>'
+            chat_html += f'<p><b>Washington IA:</b> {msg}</p>'
 
     return f'''
     <html>
@@ -19,7 +19,7 @@ def home():
         <h2>💼 Washington IA</h2>
         {chat_html}
         <form action="/chat">
-            <input name="msg" placeholder="Digite...">
+            <input name="msg" placeholder="Digite aqui">
             <button>Enviar</button>
         </form>
     </body>
