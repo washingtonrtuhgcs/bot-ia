@@ -10,9 +10,21 @@ def home():
 
     for i, msg in enumerate(conversa):
         if i % 2 == 0:
-            chat_html += f'<p><b>Você:</b> {msg}</p>'
+            chat_html += f'''
+            <div style="text-align:right;margin:10px;">
+                <span style="background:#25D366;color:white;padding:10px 15px;border-radius:15px;display:inline-block;">
+                    {msg}
+                </span>
+            </div>
+            '''
         else:
-            chat_html += f'<p><b>Washington IA:</b> {msg}</p>'
+            chat_html += f'''
+            <div style="text-align:left;margin:10px;">
+                <span style="background:#ffffff;padding:10px 15px;border-radius:15px;display:inline-block;">
+                    {msg}
+                </span>
+            </div>
+            '''
 
     return f'''
     <html>
@@ -22,13 +34,15 @@ def home():
         💼 Washington IA
     </div>
 
-    <div style="padding:10px;">
+    <div style="padding-bottom:70px;">
         {chat_html}
     </div>
 
     <form action="/chat" style="position:fixed;bottom:0;width:100%;display:flex;background:#fff;padding:10px;">
-        <input name="msg" placeholder="Digite..." style="flex:1;padding:10px;">
-        <button>Enviar</button>
+        <input name="msg" placeholder="Digite sua mensagem..." style="flex:1;padding:10px;border-radius:20px;border:1px solid #ccc;">
+        <button style="margin-left:10px;background:#25D366;color:white;border:none;border-radius:20px;padding:10px 15px;">
+            Enviar
+        </button>
     </form>
 
     </body>
@@ -42,9 +56,9 @@ def chat():
     texto = msg.lower()
 
     if 'oi' in texto:
-        resp = "Olá! 👋 Digite 1 para Loja ou 2 para Trade"
+        resp = "Olá! 👋 Eu sou Washington IA\nDigite 1 para Loja ou 2 para Trade"
     elif msg == '1':
-        resp = "🛒 Produtos: Camisa R$50 | Calça R$100"
+        resp = "🛒 Produtos:\n1 - Camisa R$50\n2 - Calça R$100"
     elif msg == '2':
         resp = "📈 Trade: digite 'sinal' ou 'estrategia'"
     elif 'sinal' in texto:
