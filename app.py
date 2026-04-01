@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, session, redirect
+import random
 
 app = Flask(__name__)
 app.secret_key = "segredo123"
@@ -7,8 +8,32 @@ PIX = "12074966423"
 
 usuarios_vip = ["admin", "cliente1", "vip123"]
 
+ativos = ["BTC/USD", "EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD"]
+
 def gerar_sinal():
-    return "🚀 SINAL: BTC/USD → COMPRA ⏱ 5min ⚠️ Use gerenciamento!"
+    ativo = random.choice(ativos)
+    direcao = random.choice(["COMPRA 🟢", "VENDA 🔴"])
+    tempo = random.choice(["1 min", "5 min", "15 min"])
+
+    analise = random.choice([
+        "📊 Tendência forte confirmada",
+        "📉 Reversão em zona de suporte",
+        "📈 Rompimento de resistência",
+        "📊 Mercado lateral, entrada precisa",
+        "📉 Pullback confirmado"
+    ])
+
+    return f"""
+🚀 SINAL VIP
+
+📊 Ativo: {ativo}
+📈 Direção: {direcao}
+⏱ Expiração: {tempo}
+
+{analise}
+
+⚠️ Use gerenciamento de risco
+"""
 
 def estrategia():
     return """📊 Estratégia PRO:
