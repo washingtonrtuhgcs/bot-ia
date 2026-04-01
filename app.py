@@ -22,7 +22,6 @@ def gerar_sinal():
     tempo = random.choice(timeframes)
 
     confianca = random.randint(87, 99)
-
     entrada = round(random.uniform(1.000, 2.000), 4)
 
     analise = random.choice([
@@ -41,8 +40,14 @@ def gerar_sinal():
         "Zona de oferta/demanda forte"
     ])
 
+    horario = random.choice([
+        "Entrada imediata",
+        "Aguardar fechamento da vela",
+        "Confirmar próximo candle"
+    ])
+
     return f"""
-🚀 SINAL VIP PRO
+🚀 SINAL VIP PRO MAX
 
 📊 Ativo: {ativo}
 📈 Direção: {direcao}
@@ -52,13 +57,18 @@ def gerar_sinal():
 
 📊 Análise:
 {analise}
-🔎 Confirmação: {indicador}
+
+🔎 Confirmação:
+{indicador}
+
+⏰ Timing:
+{horario}
 
 ⚠️ Use gerenciamento de risco
 """
 
 def estrategia():
-    return """📊 Estratégia PROFISSIONAL:
+    return """📊 Estratégia PROFISSIONAL MAX:
 
 ✔ Tendência (M5 e M15)
 ✔ Suporte e resistência
@@ -66,6 +76,8 @@ def estrategia():
 ✔ Confirmação de vela
 ✔ Indicadores (RSI + MACD)
 ✔ Gestão de risco (2% por entrada)
+✔ Evitar notícias de alto impacto
+✔ Operar apenas com confluência
 """
 
 def responder(msg):
@@ -94,24 +106,34 @@ def login():
             return redirect("/pagar")
 
     return """
-    <html><body style="background:#0b132b;color:white;text-align:center">
+    <html>
+    <body style="background:#0b132b;color:white;text-align:center">
+
     <h2>🔐 Área VIP</h2>
+
     <form method="post">
         <input name="user" placeholder="Digite seu usuário">
         <button>Entrar</button>
     </form>
-    </body></html>
+
+    </body>
+    </html>
     """
 
 @app.route("/pagar")
 def pagar():
     return f"""
-    <html><body style="background:#0b132b;color:white;text-align:center">
+    <html>
+    <body style="background:#0b132b;color:white;text-align:center">
+
     <h2>💰 Acesso VIP</h2>
     <p>R$30</p>
     <p>PIX: {PIX}</p>
+
     <a href="/">Voltar</a>
-    </body></html>
+
+    </body>
+    </html>
     """
 
 @app.route("/vip")
@@ -123,7 +145,7 @@ def vip():
     <html>
     <body style="background:#0b132b;color:white;font-family:Arial;text-align:center">
 
-    <h2>🤖 IA Trader VIP PRO</h2>
+    <h2>🤖 IA Trader VIP PRO MAX</h2>
     <p>👤 {session['user']}</p>
 
     <div id="msgs"></div>
@@ -160,4 +182,5 @@ def chat():
     msg = request.form.get("msg")
     return jsonify({"resposta": responder(msg)})
 
-app.run(host="0.0.0.0", port=10000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
