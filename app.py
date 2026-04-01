@@ -1,88 +1,76 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session, redirect
 import random
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = "segredo123"
+app.secret_key = "segredo_ultra_123"
 
-# 🔐 Config
+# 💰 CONFIG
 PIX = "12074966423"
+VALOR_VIP = "R$30"
 
-usuarios_vip = ["admin", "cliente1", "vip"]
+usuarios_vip = ["admin", "vip", "cliente1"]
 
-# 📊 Ativos
+# 📊 ATIVOS
 ativos = [
     "BTC/USD", "ETH/USD", "EUR/USD", "GBP/USD",
-    "USD/JPY", "AUD/USD", "NZD/USD", "USD/CAD"
+    "USD/JPY", "AUD/USD", "USD/BRL", "NZD/USD"
 ]
 
-# ⏱ Tempos
 tempos = ["1 min", "3 min", "5 min", "15 min"]
 
-# 📈 Estratégias
 estrategias = [
     "📊 Tendência forte confirmada (EMA + RSI)",
     "📉 Reversão em zona de suporte",
     "📈 Rompimento de resistência",
-    "📊 Mercado lateral (pullback)",
+    "📊 Pullback confirmado",
     "📉 Sobrecompra (RSI > 70)",
     "📈 Sobrevenda (RSI < 30)"
 ]
 
-# 🔍 Força do sinal
 forca = ["🔥 FORTE", "⚡ MÉDIO", "⚠️ FRACO"]
+prob = ["82%", "85%", "88%", "90%", "92%", "95%"]
 
-# 🎯 Probabilidade
-probabilidade = ["82%", "85%", "88%", "90%", "92%"]
-
-
+# 🚀 GERAR SINAL
 def gerar_sinal():
-    ativo = random.choice(ativos)
-    direcao = random.choice(["COMPRA", "VENDA"])
-    tempo = random.choice(tempos)
-    estrategia = random.choice(estrategias)
-    nivel = random.choice(forca)
-    chance = random.choice(probabilidade)
-
-    horario = datetime.now().strftime("%H:%M:%S")
-
     return f"""
-🚀 SINAL VIP PRO
+🚀 SINAL ULTRA VIP
 
-📊 Ativo: {ativo}
-📈 Direção: {direcao}
-⏱ Expiração: {tempo}
-🎯 Probabilidade: {chance}
-{nivel}
+📊 Ativo: {random.choice(ativos)}
+📈 Direção: {random.choice(["COMPRA 🟢", "VENDA 🔴"])}
+⏱ Expiração: {random.choice(tempos)}
+
+🎯 Probabilidade: {random.choice(prob)}
+{random.choice(forca)}
 
 🧠 Análise:
-{estrategia}
+{random.choice(estrategias)}
 
-⏰ Horário: {horario}
+⏰ Horário: {datetime.now().strftime("%H:%M:%S")}
 
 ⚠️ Use gerenciamento de risco
 💰 Entrada recomendada: 2% da banca
 """
 
-
-def analisar_mercado():
+# 🧠 ANALISE
+def analisar():
     return """
 🧠 ANÁLISE DO MERCADO
 
-📊 Tendência geral: Alta
+📊 Tendência: Alta
 📈 Força: Moderada
-📉 Correção possível
+📉 Possível correção
 
-🔎 Indicadores:
-- RSI: 63 (neutro)
+📌 Indicadores:
+- RSI: 64
 - EMA: alinhadas para compra
-- Volume: crescente
+- Volume: forte
 
-📌 Conclusão:
-Mercado com viés de COMPRA
+🎯 Conclusão:
+Viés de COMPRA no momento
 """
 
-
+# 🤖 RESPOSTAS
 def responder(msg):
     msg = msg.lower()
 
@@ -90,58 +78,120 @@ def responder(msg):
         return gerar_sinal()
 
     elif "analisar" in msg:
-        return analisar_mercado()
+        return analisar()
 
-    elif "estrategia" in msg:
+    elif "estrateg" in msg:
         return """
-📊 ESTRATÉGIA PRO
+📊 ESTRATÉGIA ULTRA
 
-✔️ Tendência
-✔️ Suporte e resistência
-✔️ Confirmação de vela
-✔️ Volume
-✔️ RSI + EMA
+✔ Tendência
+✔ Suporte e resistência
+✔ Confirmação de vela
+✔ RSI + EMA
+✔ Volume
 
 🎯 Entrada sempre com confirmação
 """
 
-    elif "vip" in msg:
-        return f"""
-🔒 ACESSO VIP
+    elif "vip" in msg or "pagar" in msg:
+        return f"💰 VIP: {VALOR_VIP}\nPIX: {PIX}"
 
-💰 Chave PIX:
-{PIX}
+    return "Digite: sinal | analisar | estrategia | vip"
 
-Após pagamento envie comprovante.
-"""
+# 🔐 LOGIN
+@app.route("/", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        user = request.form.get("user").lower().strip()
 
-    else:
-        return "Digite: sinal | analisar | estrategia | vip"
+        if user in usuarios_vip:
+            session["user"] = user
+            return redirect("/vip")
+        else:
+            return redirect("/pagar")
 
-
-# 🌐 Rotas
-@app.route("/")
-def home():
     return """
-    <h2>🤖 IA Trader VIP PRO</h2>
-    <form action="/chat" method="post">
-        <input name="msg" placeholder="Digite aqui..." />
-        <button type="submit">Enviar</button>
+    <html>
+    <body style="background:#0b132b;color:white;text-align:center;font-family:Arial">
+
+    <h2>🔐 ÁREA VIP</h2>
+
+    <form method="post">
+        <input name="user" placeholder="Digite seu usuário" style="padding:10px">
+        <br><br>
+        <button style="padding:10px">Entrar</button>
     </form>
+
+    </body>
+    </html>
     """
 
+# 💰 PAGAMENTO
+@app.route("/pagar")
+def pagar():
+    return f"""
+    <html>
+    <body style="background:#0b132b;color:white;text-align:center;font-family:Arial">
 
+    <h2>💰 ACESSO VIP</h2>
+
+    <p>Valor: {VALOR_VIP}</p>
+    <p>PIX: {PIX}</p>
+
+    <br>
+    <a href="/" style="color:white">Voltar</a>
+
+    </body>
+    </html>
+    """
+
+# 🤖 PAINEL
+@app.route("/vip")
+def vip():
+    if "user" not in session:
+        return redirect("/")
+
+    return f"""
+    <html>
+    <body style="background:#0b132b;color:white;font-family:Arial;text-align:center">
+
+    <h2>🤖 IA TRADER ULTRA</h2>
+    <p>👤 {session['user']}</p>
+
+    <div id="chat" style="max-width:500px;margin:auto;text-align:left"></div>
+
+    <input id="msg" placeholder="Digite: sinal" style="width:70%;padding:10px">
+    <button onclick="enviar()" style="padding:10px">Enviar</button>
+
+    <script>
+    function enviar(){{
+        let msg = document.getElementById("msg").value;
+
+        fetch("/chat", {{
+            method: "POST",
+            headers: {{"Content-Type":"application/x-www-form-urlencoded"}},
+            body: "msg=" + msg
+        }})
+        .then(r => r.json())
+        .then(d => {{
+            document.getElementById("chat").innerHTML +=
+                "<p><b>Você:</b> " + msg + "</p>" +
+                "<p><b>Bot:</b><br>" + d.resposta + "</p><hr>";
+        }});
+
+        document.getElementById("msg").value = "";
+    }}
+    </script>
+
+    </body>
+    </html>
+    """
+
+# 🔄 CHAT
 @app.route("/chat", methods=["POST"])
 def chat():
     msg = request.form.get("msg")
-    resposta = responder(msg)
+    return jsonify({"resposta": responder(msg)})
 
-    return f"""
-    <h3>Você: {msg}</h3>
-    <h3>Bot: {resposta}</h3>
-    <a href="/">Voltar</a>
-    """
-
-
-if __name__ == "__main__":
-    app.run()
+# 🚀 START
+app.run(host="0.0.0.0", port=10000)
