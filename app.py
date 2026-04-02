@@ -7,7 +7,7 @@ import os
 
 app = Flask(__name__)
 
-TOKEN = "COLE_SEU_TOKEN_AQUI"
+TOKEN = "8635303327:AAF9UHY5R4dM_PqPv2675OEO1yOg31GaJMc"
 CHAT_ID = "5778693963"
 
 URL = f"https://api.telegram.org/bot{TOKEN}"
