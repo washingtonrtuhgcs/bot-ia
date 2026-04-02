@@ -1,16 +1,16 @@
 from flask import Flask, request
 import requests
 import random
+import threading
+import time
 
 app = Flask(__name__)
 
 # 🔐 CONFIG
 TOKEN = "SEU_TOKEN_AQUI"
+CHAT_ID = "SEU_CHAT_ID_AQUI"
+
 URL = f"https://api.telegram.org/bot{TOKEN}"
-
-usuarios_vip = [123456789]  # coloque seu ID aqui
-
-PIX = "12074966423"
 
 ativos = [
     "BTC/USDT", "ETH/USDT", "EUR/USD",
@@ -27,47 +27,36 @@ def gerar_sinal():
     confianca = random.randint(87, 99)
 
     return f"""
-📊 SINAL VIP
+🚨 SINAL AUTOMÁTICO 🚨
 
 💰 Ativo: {ativo}
 📈 Direção: {direcao}
 ⏱ Tempo: {tempo}
 🔥 Confiança: {confianca}%
 
-🚀 Entre agora!
+⚠️ Use gerenciamento de risco
 """
 
 # 📩 ENVIAR MSG
-def enviar(chat_id, texto):
-    requests.post(f"{URL}/sendMessage", json={
-        "chat_id": chat_id,
-        "text": texto
-    })
-
-# 🤖 WEBHOOK TELEGRAM
-@app.route(f"/{TOKEN}", methods=["POST"])
-def bot():
-    data = request.json
-
-    if "message" in data:
-        chat_id = data["message"]["chat"]["id"]
-        texto = data["message"].get("text", "")
-
-        if texto == "/start":
-            enviar(chat_id, "🔥 Bem-vindo ao BOT DE SINAIS!\nDigite /vip para acessar")
-
-        elif texto == "/vip":
-            if chat_id in usuarios_vip:
-                enviar(chat_id, gerar_sinal())
-            else:
-                enviar(chat_id, f"🔒 Acesso VIP\n\n💳 Pagamento via PIX:\n{PIX}")
-
-    return "ok"
+def enviar():
+    while True:
+        msg = gerar_sinal()
+        requests.post(f"{URL}/sendMessage", json={
+            "chat_id": CHAT_ID,
+            "text": msg
+        })
+        time.sleep(300)  # envia a cada 5 minutos
 
 # 🌐 HOME
 @app.route("/")
 def home():
-    return "BOT ONLINE 🚀"
+    return "BOT AUTOMÁTICO ONLINE 🚀"
+
+# 🔁 INICIAR THREAD
+def iniciar_bot():
+    t = threading.Thread(target=enviar)
+    t.start()
 
 if __name__ == "__main__":
+    iniciar_bot()
     app.run(host="0.0.0.0", port=3000)
