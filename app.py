@@ -1,3 +1,6 @@
+rm -f app.py
+
+cat > app.py << 'EOF'
 from flask import Flask, render_template_string
 import requests
 import random
@@ -7,8 +10,8 @@ import os
 
 app = Flask(__name__)
 
-TOKEN = "SEU_TOKEN"
-CHAT_ID = "SEU_CHAT_ID"
+TOKEN = "COLOQUE_SEU_TOKEN_AQUI"
+CHAT_ID = "5778693963"
 
 URL = f"https://api.telegram.org/bot{TOKEN}"
 
@@ -47,3 +50,4 @@ def iniciar():
 if __name__ == "__main__":
     iniciar()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
+EOF
