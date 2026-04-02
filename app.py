@@ -1,6 +1,3 @@
-rm -f app.py
-
-cat > app.py << 'EOF'
 from flask import Flask, render_template_string
 import requests
 import random
@@ -50,4 +47,3 @@ def iniciar():
 if __name__ == "__main__":
     iniciar()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
-EOF
