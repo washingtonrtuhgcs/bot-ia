@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, render_template_string
 import requests
 import random
 import threading
@@ -6,57 +6,62 @@ import time
 
 app = Flask(__name__)
 
-# 🔐 CONFIG
-TOKEN = "SEU_TOKEN_AQUI"
-CHAT_ID = "SEU_CHAT_ID_AQUI"
+TOKEN = "SEU_TOKEN"
+CHAT_ID = "SEU_CHAT_ID"
 
 URL = f"https://api.telegram.org/bot{TOKEN}"
 
-ativos = [
-    "BTC/USDT", "ETH/USDT", "EUR/USD",
-    "GBP/USD", "USD/JPY", "AUD/USD"
-]
+ultimo_sinal = "Aguardando sinal..."
 
-timeframes = ["1 min", "5 min", "15 min"]
+ativos = ["BTC/USDT","ETH/USDT","EUR/USD","GBP/USD","USD/JPY"]
+timeframes = ["1 min","5 min","15 min"]
 
-# 🎯 GERAR SINAL
 def gerar_sinal():
     ativo = random.choice(ativos)
-    direcao = random.choice(["COMPRA 🟢", "VENDA 🔴"])
+    direcao = random.choice(["COMPRA 🟢","VENDA 🔴"])
     tempo = random.choice(timeframes)
-    confianca = random.randint(87, 99)
+    conf = random.randint(87, 99)
 
     return f"""
-🚨 SINAL AUTOMÁTICO 🚨
+📊 SINAL AO VIVO
 
-💰 Ativo: {ativo}
-📈 Direção: {direcao}
-⏱ Tempo: {tempo}
-🔥 Confiança: {confianca}%
-
-⚠️ Use gerenciamento de risco
+Ativo: {ativo}
+Direção: {direcao}
+Tempo: {tempo}
+Confiança: {conf}%
 """
 
-# 📩 ENVIAR MSG
-def enviar():
+def enviar_sinais():
+    global ultimo_sinal
     while True:
-        msg = gerar_sinal()
-        requests.post(f"{URL}/sendMessage", json={
-            "chat_id": CHAT_ID,
-            "text": msg
-        })
-        time.sleep(300)  # envia a cada 5 minutos
+        sinal = gerar_sinal()
+        ultimo_sinal = sinal
 
-# 🌐 HOME
+        try:
+            requests.post(f"{URL}/sendMessage", json={
+                "chat_id": CHAT_ID,
+                "text": sinal
+            })
+        except:
+            pass
+
+        time.sleep(300)  # 5 minutos
+
 @app.route("/")
 def home():
-    return "BOT AUTOMÁTICO ONLINE 🚀"
+    return render_template_string(f"""
+    <html>
+    <body style="background:#0b132b;color:white;text-align:center;">
+        <h1>🚀 IA TRADER VIP</h1>
+        <pre>{ultimo_sinal}</pre>
+    </body>
+    </html>
+    """)
 
-# 🔁 INICIAR THREAD
-def iniciar_bot():
-    t = threading.Thread(target=enviar)
+def iniciar():
+    t = threading.Thread(target=enviar_sinais)
     t.start()
 
 if __name__ == "__main__":
-    iniciar_bot()
+    iniciar()
     app.run(host="0.0.0.0", port=3000)
