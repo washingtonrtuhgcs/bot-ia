@@ -1,3 +1,4 @@
+cat > app.py << 'EOF'
 from flask import Flask, render_template_string
 import requests
 import random
@@ -13,55 +14,37 @@ URL = f"https://api.telegram.org/bot{TOKEN}"
 
 ultimo_sinal = "Aguardando sinal..."
 
-ativos = ["BTC/USDT","ETH/USDT","EUR/USD","GBP/USD","USD/JPY"]
-timeframes = ["1 min","5 min","15 min"]
+def enviar_mensagem(msg):
+    try:
+        requests.get(f"{URL}/sendMessage?chat_id={CHAT_ID}&text={msg}")
+    except:
+        pass
 
-def gerar_sinal():
-    ativo = random.choice(ativos)
-    direcao = random.choice(["COMPRA 🟢","VENDA 🔴"])
-    tempo = random.choice(timeframes)
-    conf = random.randint(87, 99)
-
-    return f"""
-📊 SINAL AO VIVO
-
-Ativo: {ativo}
-Direção: {direcao}
-Tempo: {tempo}
-Confiança: {conf}%
-"""
-
-def enviar_sinais():
+def gerar_sinais():
     global ultimo_sinal
     while True:
-        sinal = gerar_sinal()
-        ultimo_sinal = sinal
+        direcao = random.choice(["COMPRA 🟢", "VENDA 🔴"])
+        tempo = random.choice(["1 MIN", "5 MIN"])
+        msg = f"SINAL: {direcao} | TEMPO: {tempo}"
+        
+        ultimo_sinal = msg
+        enviar_mensagem(msg)
+        
+        time.sleep(60)
 
-        try:
-            requests.post(f"{URL}/sendMessage", json={
-                "chat_id": CHAT_ID,
-                "text": sinal
-            })
-        except:
-            pass
-
-        time.sleep(300)  # 5 minutos
-
-@app.route("/")
+@app.route('/')
 def home():
     return render_template_string(f"""
-    <html>
-    <body style="background:#0b132b;color:white;text-align:center;">
-        <h1>🚀 IA TRADER VIP</h1>
-        <pre>{ultimo_sinal}</pre>
-    </body>
-    </html>
+    <h1>BOT ONLINE 🤖</h1>
+    <p>{ultimo_sinal}</p>
     """)
 
 def iniciar():
-    t = threading.Thread(target=enviar_sinais)
+    t = threading.Thread(target=gerar_sinais)
+    t.daemon = True
     t.start()
 
 if __name__ == "__main__":
     iniciar()
-    app.run(host="0.0.0.0", port=3000)
+    app.run(host="0.0.0.0", port=10000)
+EOF
