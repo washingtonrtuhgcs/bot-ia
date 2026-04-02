@@ -1,9 +1,9 @@
-cat > app.py << 'EOF'
 from flask import Flask, render_template_string
 import requests
 import random
 import threading
 import time
+import os
 
 app = Flask(__name__)
 
@@ -26,10 +26,10 @@ def gerar_sinais():
         direcao = random.choice(["COMPRA 🟢", "VENDA 🔴"])
         tempo = random.choice(["1 MIN", "5 MIN"])
         msg = f"SINAL: {direcao} | TEMPO: {tempo}"
-        
+
         ultimo_sinal = msg
         enviar_mensagem(msg)
-        
+
         time.sleep(60)
 
 @app.route('/')
@@ -46,5 +46,4 @@ def iniciar():
 
 if __name__ == "__main__":
     iniciar()
-    app.run(host="0.0.0.0", port=10000)
-EOF
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
