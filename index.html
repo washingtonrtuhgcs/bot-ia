@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cassino Online</title>
+</head>
+<body>
+
+<h1>🎰 Cassino Demo</h1>
+<p>Saldo: <span id="saldo">100</span></p>
+
+<button onclick="jogar()">Girar Slot</button>
+
+<p id="resultado"></p>
+
+<script>
+let saldo = 100;
+
+function jogar() {
+  if (saldo <= 0) {
+    document.getElementById("resultado").innerText = "Sem saldo!";
+    return;
+  }
+
+  saldo -= 10;
+
+  let numero = Math.floor(Math.random() * 5);
+
+  if (numero === 1) {
+    saldo += 50;
+    document.getElementById("resultado").innerText = "🎉 Você ganhou!";
+  } else {
+    document.getElementById("resultado").innerText = "😢 Perdeu!";
+  }
+
+  document.getElementById("saldo").innerText = saldo;
+}
+</script>
+
+</body>
+</html>
