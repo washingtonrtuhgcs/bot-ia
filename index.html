@@ -39,7 +39,10 @@
 <p id="resultado"></p>
 
 <script>
-let saldo = 100;
+let saldo = localStorage.getItem("saldo") || 100;
+saldo = parseInt(saldo);
+
+document.getElementById("saldo").innerText = saldo;
 
 function jogar() {
   if (saldo <= 0) {
@@ -58,9 +61,8 @@ function jogar() {
     document.getElementById("resultado").innerText = "😢 PERDEU!";
   }
 
+  localStorage.setItem("saldo", saldo);
+
   document.getElementById("saldo").innerText = saldo;
 }
 </script>
-
-</body>
-</html>
