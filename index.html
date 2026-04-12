@@ -30,7 +30,6 @@
 <h1>🎰 Cassino Online</h1>
 
 <div id="login">
-  <h3>Login</h3>
   <input id="user" placeholder="Usuário">
   <button onclick="entrar()">Entrar</button>
 </div>
@@ -43,10 +42,10 @@
   <button onclick="slot()">Girar</button>
 
   <h3>🎡 Roleta</h3>
-  <button onclick="roleta()">Girar Roleta</button>
+  <button onclick="roleta()">Girar</button>
 
   <h3>📈 Crash</h3>
-  <button onclick="crash()">Jogar Crash</button>
+  <button onclick="crash()">Jogar</button>
 
   <p id="resultado"></p>
 </div>
@@ -62,7 +61,7 @@ function entrar() {
   localStorage.setItem("usuario", usuario);
 
   saldo = localStorage.getItem(usuario) || 100;
-  saldo = parseInt(saldo);
+  saldo = parseFloat(saldo);
 
   document.getElementById("usuario").innerText = usuario;
   document.getElementById("saldo").innerText = saldo;
@@ -76,11 +75,22 @@ function salvar() {
   document.getElementById("saldo").innerText = saldo;
 }
 
+function enviarTelegram(msg) {
+  fetch("/enviar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ msg: msg })
+  });
+}
+
 function slot() {
   saldo -= 10;
   if (Math.random() < 0.3) {
     saldo += 40;
     resultado("🎉 Slot GANHOU!");
+    enviarTelegram("🎉 " + usuario + " ganhou no SLOT! Saldo: " + saldo);
   } else {
     resultado("😢 Slot perdeu");
   }
@@ -92,9 +102,10 @@ function roleta() {
   let cor = ["vermelho","preto","verde"][Math.floor(Math.random()*3)];
   if (cor === "verde") {
     saldo += 100;
-    resultado("🟢 Verde! GANHOU MUITO!");
+    resultado("🟢 Verde! GANHOU!");
+    enviarTelegram("🎡 " + usuario + " ganhou na ROLETA! Saldo: " + saldo);
   } else {
-    resultado("🔴 Perdeu na roleta");
+    resultado("🔴 Perdeu");
   }
   salvar();
 }
@@ -105,11 +116,11 @@ function crash() {
 
   if (multi > 2) {
     saldo += multi * 10;
-    resultado("📈 Crash x" + multi + " GANHOU!");
+    resultado("📈 x" + multi + " GANHOU!");
+    enviarTelegram("📈 " + usuario + " ganhou no CRASH x" + multi + "! Saldo: " + saldo);
   } else {
-    resultado("💥 Crash quebrou em x" + multi);
+    resultado("💥 Quebrou em x" + multi);
   }
-
   salvar();
 }
 
