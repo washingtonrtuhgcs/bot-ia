@@ -10,59 +10,121 @@
       font-family: Arial;
     }
 
-    h1 {
-      margin-top: 40px;
-    }
-
     button {
-      padding: 15px 30px;
-      font-size: 18px;
+      padding: 12px 25px;
+      margin: 5px;
       background: gold;
       border: none;
       border-radius: 10px;
       cursor: pointer;
     }
 
-    #resultado {
-      margin-top: 20px;
-      font-size: 20px;
+    input {
+      padding: 10px;
+      margin: 5px;
     }
   </style>
 </head>
 <body>
 
 <h1>🎰 Cassino Online</h1>
-<p>Saldo: <span id="saldo">100</span></p>
 
-<button onclick="jogar()">Girar Slot</button>
+<div id="login">
+  <h3>Login</h3>
+  <input id="user" placeholder="Usuário">
+  <button onclick="entrar()">Entrar</button>
+</div>
 
-<p id="resultado"></p>
+<div id="cassino" style="display:none;">
+  <p>👤 <span id="usuario"></span></p>
+  <p>💰 Saldo: <span id="saldo"></span></p>
+
+  <h3>🎰 Slot</h3>
+  <button onclick="slot()">Girar</button>
+
+  <h3>🎡 Roleta</h3>
+  <button onclick="roleta()">Girar Roleta</button>
+
+  <h3>📈 Crash</h3>
+  <button onclick="crash()">Jogar Crash</button>
+
+  <p id="resultado"></p>
+</div>
 
 <script>
-let saldo = localStorage.getItem("saldo") || 100;
-saldo = parseInt(saldo);
+let saldo = 100;
+let usuario = "";
 
-document.getElementById("saldo").innerText = saldo;
+function entrar() {
+  usuario = document.getElementById("user").value;
+  if (!usuario) return;
 
-function jogar() {
-  if (saldo <= 0) {
-    document.getElementById("resultado").innerText = "Sem saldo!";
-    return;
-  }
+  localStorage.setItem("usuario", usuario);
 
-  saldo -= 10;
+  saldo = localStorage.getItem(usuario) || 100;
+  saldo = parseInt(saldo);
 
-  let numero = Math.floor(Math.random() * 5);
+  document.getElementById("usuario").innerText = usuario;
+  document.getElementById("saldo").innerText = saldo;
 
-  if (numero === 1) {
-    saldo += 50;
-    document.getElementById("resultado").innerText = "🎉 GANHOU!";
-  } else {
-    document.getElementById("resultado").innerText = "😢 PERDEU!";
-  }
+  document.getElementById("login").style.display = "none";
+  document.getElementById("cassino").style.display = "block";
+}
 
-  localStorage.setItem("saldo", saldo);
-
+function salvar() {
+  localStorage.setItem(usuario, saldo);
   document.getElementById("saldo").innerText = saldo;
 }
+
+function slot() {
+  saldo -= 10;
+  if (Math.random() < 0.3) {
+    saldo += 40;
+    resultado("🎉 Slot GANHOU!");
+  } else {
+    resultado("😢 Slot perdeu");
+  }
+  salvar();
+}
+
+function roleta() {
+  saldo -= 10;
+  let cor = ["vermelho","preto","verde"][Math.floor(Math.random()*3)];
+  if (cor === "verde") {
+    saldo += 100;
+    resultado("🟢 Verde! GANHOU MUITO!");
+  } else {
+    resultado("🔴 Perdeu na roleta");
+  }
+  salvar();
+}
+
+function crash() {
+  saldo -= 10;
+  let multi = (Math.random()*5).toFixed(2);
+
+  if (multi > 2) {
+    saldo += multi * 10;
+    resultado("📈 Crash x" + multi + " GANHOU!");
+  } else {
+    resultado("💥 Crash quebrou em x" + multi);
+  }
+
+  salvar();
+}
+
+function resultado(msg) {
+  document.getElementById("resultado").innerText = msg;
+}
+
+window.onload = () => {
+  let userSalvo = localStorage.getItem("usuario");
+  if (userSalvo) {
+    document.getElementById("user").value = userSalvo;
+    entrar();
+  }
+}
 </script>
+
+</body>
+</html>
