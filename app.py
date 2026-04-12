@@ -1,29 +1,38 @@
-from flask import Flask, request
-import requests
-import os
+from flask import Flask, render_template, redirect
+import firebase_admin
+from firebase_admin import credentials, db
+import random
 
 app = Flask(__name__)
 
-# COLOQUE SEU TOKEN E ID AQUI
-TOKEN = "8635303327:AAH5wDWbAz1PAJPccuNdu_5qHszwbx2MOX4"
-CHAT_ID = "5778693963"
+# FIREBASE
+cred = credentials.Certificate("firebase.json")
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://cassino-online-e7281-default-rtdb.firebaseio.com'
+})
 
+# HOME
 @app.route("/")
 def home():
-    return open("index.html").read()
+    saldo = db.reference("usuarios/Washington/saldo").get()
+    if saldo is None:
+        saldo = 100
+        db.reference("usuarios/Washington/saldo").set(saldo)
 
-@app.route("/enviar", methods=["POST"])
-def enviar():
-    data = request.json
-    msg = data.get("msg")
+    return render_template("index.html", saldo=saldo)
 
-    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    requests.post(url, json={
-        "chat_id": CHAT_ID,
-        "text": msg
-    })
+# SLOT
+@app.route("/slot")
+def slot():
+    ref = db.reference("usuarios/Washington/saldo")
+    saldo = ref.get() or 100
 
-    return "ok"
+    ganho = random.choice([0, 10, 20, 50, 100])
+    saldo += ganho
+
+    ref.set(saldo)
+
+    return redirect("/")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
+    app.run()

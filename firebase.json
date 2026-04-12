@@ -1,0 +1,14 @@
+
+ }
+  "type": "service_account",
+  "project_id": "cassino-online-e7281",
+  "private_key_id": "cdf4fc415f7b5ac489e81a9e04db676be44c5add",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC0tFmpKv++W4nz\nNGQmPVfdAJDeNVywxloVMehZ/TosBwt7xbo8/L0ET+ZZhFJG4ytmwgS4/XfrFrzk\nZrOiA0sQWaIFO+jO+WZTrxuAzHl5xftNGGGiJW/1ViGdxDSbyR7RfDqGAyCPX6gA\n9lZwvnLHIWrKda99zyFmqWyODY6fYdgcc5ggS1SGb4KykG1LLRizmmgzCc7D5fQb\n03ZqdaSrmu+jC1ojUVpKSu0NdARUW2udksKHQLTqQ4JBsDz0xGvJHOA7PtK1dow9\n6Kdn5Lk5BwHJq60/BLExOllr7i8Sxzfbyn5pOgW1eYwz/zJVIzgzJTjz3xitK+01\ndkZq/tzVAgMBAAECggEATEPnqX2T1TfWF3ZvpDH0oLoJ6jaUSalVQKfBHCXDROyu\nPI09Zlr2vVipa/NsNC3RVfuhuZ+EWoxMqYrs2n5QUnS57EKWJbBdrwjy7x+dTzcv\nMiENp7zsLRuucWLrHyq5XolzO7cbKVeiVNGits+yKnfgldUofU0LmEP+JE/1dy9D\nVDpTCHcDOhLwutGE2GDvKYQKfkwrF96hSlvb8PhHI7eHHqGCapuMHxmxZUNylJSW\nSzNEUWPXu27l81SFaOOSnfKjlsh960wpfCyjmERt+S+dt0BpnBEG+GF/BfxhpuQm\nJAk+CgT64m0wAuUnKKv215Qi/0CAF7qJrg4WbI+sCwKBgQDYN1WRWKUPjvDc8lUk\nJUsm9YvIr2ss70o7Pk55pZea/HaZeVfhJNl34nAFFnrmx7BnPiWyXwxOEiV22Yqs\nls7yzAF4s7nu6AQRBJFweO1mq5nH0HwLt0kQpSgxgJTUAc4+s5KHQ2ellhXZH9Bg\nTyaXiaTQmIowAfA885ylx2ESZwKBgQDV9EWH4YNoOXYKsCEmzVaP5Qn9nYm2GElR\n2krm+72Z6naDIip8zTFdhQ/wjK5JcWjIKxTdD6Tbw+b/xBqneoae2jY3jM/8gwTh\ne+BtnFQ2UCjfHT+ihn3OJ266u8I0UOWZ9Xjnwhlko97nSt8gTqi+5P7dFRenQ266\nclKllIPpYwKBgQDBRvWer/cdKVH2sEmbvhqoAOerxeOwj1d0DgZoh7Y2PWhnWSlN\ngXtEx44LfkTu96KhJ9Ta1kxRnbcPvvdPwJ/OOr81/rM+9Phtnf/E4tSU6uDU1XGN\np5IQ5xI+7gocWmDbe/qIH6EPTFLLfLzw2tBMtiY2saUVtSXj1oE5UDleEQKBgQCb\nPWI19asjNI4xsxpazSLBxa46FtSVC4onmfw/HOm1hCn5fBDX/QqUkLfAElNjdqZQ\nlvHMdE1qJ/q0GdY9Lun+2NX9+G3xCh/Ae+GbppJz1jXRrac+hddCfdoaI6IF06zE\nyRexEWTbYQubRvgeuPQ3jnBeea9v7b2qCsls2xXbgQKBgG/ac6mCRVDQPF9UAdew\n4Vs7tTCMGlKrg5DYO9J9mhJlFEj10394WrF2Nfrhaz5W1XEW3FUcldeabpQFfJwS\npISObpBWJGUbVhrvRm3UqoZw3FY3o+aHgds5T0NtnV/YJRBZyEDHALz+hFNcnfkq\n+MuSsmsDiODvkWQWqTf4SiHZ\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@cassino-online-e7281.iam.gserviceaccount.com",
+  "client_id": "102643232002221681099",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40cassino-online-e7281.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
